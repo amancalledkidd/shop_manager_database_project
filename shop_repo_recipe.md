@@ -193,35 +193,22 @@ class ShopRepository():
 ```python
 # EXAMPLES
 
-# 1
-# Get all students
+"""
+creeate instance 
+call all
+returns all database tables
+"""
 
-repo = StudentRepository()
+def test_all_works(db_connection):
+    db_connection.seed('seeds/shop_manger_database.sql')
+    shop_repo = ShopRepository(db_connection):
 
-students = repo.all()
+    call all
+    return list of all records
 
-len(students) # =>  2
 
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
 
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
 
-# 2
-# Get a single student
-
-repo = StudentRepository()
-
-student = repo.find(1)
-
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
-
-# Add more examples for each method
 ```
 
 Encode this example as a test.
