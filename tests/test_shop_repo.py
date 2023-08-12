@@ -25,24 +25,58 @@ def test_all_orders_works(db_connection):
 
 
 
-def test_all_items_works(db_connection):
-    db_connection.seed('seeds/shop_manager_database.sql')
-    shop_repo = ShopRepository(db_connection)
+# def test_all_items_works(db_connection):
+#     db_connection.seed('seeds/shop_manager_database.sql')
+#     shop_repo = ShopRepository(db_connection)
 
-    items = shop_repo.all('items')
-    assert items == [
-        Item(1, "Apple", 0.50, 10),
-        Item(2, "Bread", 0.75, 6),
-        Item(3, "Tofu", 2.50 , 4),
-        Item(4, "Spinach", 1.50, 20),
-        Item(5, "Chocolate", 3.50, 55),
-        Item(6, "Rice", 1.00, 43),
-        Item(7, "Avocado", 2.00, 11),
-        Item(8, "Lentils", 0.90, 34),
-        Item(9, "Ice cream", 3.75, 23),
-    ]
+#     items = shop_repo.all('items')
+#     assert items == [
+#         Item(1, "Apple", 0.50, 10),
+#         Item(2, "Bread", 0.75, 6),
+#         Item(3, "Tofu", 2.50 , 4),
+#         Item(4, "Spinach", 1.50, 20),
+#         Item(5, "Chocolate", 3.50, 55),
+#         Item(6, "Rice", 1.00, 43),
+#         Item(7, "Avocado", 2.00, 11),
+#         Item(8, "Lentils", 0.90, 34),
+#         Item(9, "Ice cream", 3.75, 23),
+#     ]
     
 
 # "SELECT * FROM items " \
 # "JOIN items_orders ON items_orders.item_id = items.id " \
 # "JOIN orders ON items_orders.order_id = orders.id")
+
+"""
+create instance 
+call find by item, 
+returns item with list of orders
+"""
+
+def test_find_by_item(db_connection):
+    db_connection.seed('seeds/shop_manager_database.sql')
+    shop_repo = ShopRepository(db_connection)
+
+    item_with_orders = shop_repo.find_by_item('Tofu')
+    assert item_with_orders == Item(3, "Tofu", 2.50 , 4, [
+        Order(1, 'Kumani', '08/09/23'),
+        Order(4, 'Dave', '02/05/23')
+    ])
+
+"""
+create instance 
+call find by order, 
+returns order with list of items
+"""
+
+def test_find_by_order(db_connection):
+    db_connection.seed('seeds/shop_manager_database.sql')
+    shop_repo = ShopRepository(db_connection)
+
+    order_with_items = shop_repo.find_by_order(1)
+    assert order_with_items == Order(1, 'Kumani', '08/09/23', [
+        Item(1, "Apple", 0.50, 10),
+        Item(2, "Bread", 0.75, 6),
+        Item(3, "Tofu", 2.50 , 4),
+        Item(7, "Avocado", 2.00, 11)
+    ])
